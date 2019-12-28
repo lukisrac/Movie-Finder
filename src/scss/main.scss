@@ -4,9 +4,11 @@
 @import 'base/base';
 @import 'base/typography';
 
+@import 'components/movie';
+@import 'components/search';
+
 @import 'layout/footer';
 @import 'layout/grid';
 @import 'layout/header';
-@import 'layout/search';
 
 @import 'pages/home';
