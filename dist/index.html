@@ -6,10 +6,56 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Movie Finder</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:300,400,700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/main.min.css" />
   </head>
   <body>
-    <h1>Movie Finder App</h1>
+    <header class="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+            <h1 class="main__title">Movie Finder</h1>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section__main">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 text-center">
+              <div class="search">
+                <div class="search__header">
+                  <h2 class="search__heading">Just type and search</h2>
+                  <img src="/dist/images/arrow-down.png" alt="arrow down" class="search__arrow" />
+                </div>
+                <div class="search__body">
+                  <div class="search__box-container">
+                    <div class="search__box">
+                      <form class="search__form">
+                        <input type="text" placeholder="Search movie..." class="search__input" />
+                        <button type="submit" class="search__button">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <title />
+                            <path d="M20.56,18.44l-4.67-4.67a7,7,0,1,0-2.12,2.12l4.67,4.67a1.5,1.5,0,0,0,2.12,0A1.49,1.49,0,0,0,20.56,18.44ZM5,10a5,5,0,1,1,5,5A5,5,0,0,1,5,10Z" />
+                          </svg>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer></footer>
 
     <script src="scripts/main.js"></script>
   </body>

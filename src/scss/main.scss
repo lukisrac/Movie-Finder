@@ -1,2 +1,12 @@
-@import 'base/variables';
+@import 'abstracts/placeholders';
+@import 'abstracts/variables';
+
 @import 'base/base';
+@import 'base/typography';
+
+@import 'layout/footer';
+@import 'layout/grid';
+@import 'layout/header';
+@import 'layout/search';
+
+@import 'pages/home';
