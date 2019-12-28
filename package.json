@@ -1,0 +1,28 @@
+{
+  "name": "movie-finder",
+  "version": "1.0.0",
+  "description": "Javascript app for searching movies",
+  "main": "index.js",
+  "scripts": {
+    "build": "node_modules/.bin/webpack --mode production",
+    "serve": "webpack-dev-server --mode development"
+  },
+  "keywords": [
+    "movie",
+    "search",
+    "finder"
+  ],
+  "author": "Lukáš Rác",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^3.10.1"
+  }
+}
