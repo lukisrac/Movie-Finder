@@ -69,6 +69,7 @@ body {
   position: relative;
   padding-left: 4rem;
   margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
 }
 
 .movie__genre::before {
@@ -99,6 +100,11 @@ body {
   -ms-flex-preferred-size: 20%;
       flex-basis: 20%;
   color: #ea315a;
+}
+
+.movie__label-text {
+  -ms-flex-preferred-size: 80%;
+      flex-basis: 80%;
 }
 
 .search__arrow {

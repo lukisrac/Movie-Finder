@@ -26,6 +26,7 @@
     position: relative;
     padding-left: 4rem;
     margin: 0.5rem 0 1.5rem;
+    font-size: 0.9rem;
 
     &::before {
       content: '';
@@ -50,5 +51,8 @@
   &__label {
     flex-basis: 20%;
     color: $secondary;
+  }
+  &__label-text {
+    flex-basis: 80%;
   }
 }

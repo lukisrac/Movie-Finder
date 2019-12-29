@@ -3,6 +3,7 @@ const language = 'en-US';
 const movieTitle = document.querySelector('.movie__title');
 const movieGenres = document.querySelector('.movie__genre');
 const movieDirector = document.querySelector('.director');
+const movieWriters = document.querySelector('.writer');
 
 const getMovie = async id => {
   const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apikey}&language=${language}`;
@@ -20,7 +21,6 @@ const getCredits = async id => {
 
 getMovie('181812')
   .then(data => {
-    console.log(data);
     movieTitle.textContent = data.title;
     let genresArray = data.genres;
     let genresNames = genresArray
@@ -33,14 +33,25 @@ getMovie('181812')
   .catch(err => console.log(err));
 
 getCredits('181812').then(data => {
-  console.log(data.crew);
   let crewArray = data.crew;
-  let crewDepartures = crewArray.filter(dep => {
-    return dep.department === 'Directing';
+  // Return director and write it to the page
+  let director = crewArray.filter(dir => {
+    return dir.department === 'Directing';
   });
-  let crewDirector = crewDepartures[0].name;
-  console.log(crewDirector);
+  let directorName = director[0].name;
   movieDirector.innerHTML = `
-  <span class="movie__label">Director:</span>${crewDirector}
+    <span class="movie__label">Director:</span><span class="movie__label-text">${directorName}</span>
+  `;
+  // Return writers and write it to the page
+  let writers = crewArray.filter(writer => {
+    return writer.department === 'Writing';
+  });
+  let writersNames = writers
+    .map(writer => {
+      return writer.name;
+    })
+    .join(', ');
+  movieWriters.innerHTML = `
+    <span class="movie__label">Writer:</span><span class="movie__label-text">${writersNames}</span>
   `;
 });
