@@ -28,7 +28,7 @@
     float: right;
     width: 40px;
     height: 40px;
-    border: 0.1rem solid #fff;
+    border: 0.1rem solid $secondary;
     border-radius: 50%;
     background: #2f3640;
     display: flex;
@@ -40,10 +40,10 @@
     svg {
       width: 1.5rem;
       height: 1.5rem;
-      fill: #fff;
+      fill: $secondary;
     }
     &:hover {
-      background: #fff;
+      background: $secondary;
 
       svg {
         fill: $search-box-bg;

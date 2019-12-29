@@ -140,7 +140,7 @@ body {
   float: right;
   width: 40px;
   height: 40px;
-  border: 0.1rem solid #fff;
+  border: 0.1rem solid #ea315a;
   border-radius: 50%;
   background: #2f3640;
   display: -webkit-box;
@@ -160,11 +160,11 @@ body {
 .search__button svg {
   width: 1.5rem;
   height: 1.5rem;
-  fill: #fff;
+  fill: #ea315a;
 }
 
 .search__button:hover {
-  background: #fff;
+  background: #ea315a;
 }
 
 .search__button:hover svg {
