@@ -10,6 +10,21 @@ const movieRelease = document.querySelector('.release');
 const movieCountry = document.querySelector('.country');
 const movieLanguage = document.querySelector('.language');
 
+// Open trailer modal
+const trailerBtn = document.querySelector('.trailer__button');
+const trailerModal = document.querySelector('.modal__trailer');
+trailerBtn.addEventListener('click', () => {
+  trailerModal.classList.remove('d-none');
+});
+
+// Close trailer modal
+const trailerClose = document.querySelector('.close-modal');
+trailerModal.addEventListener('click', e => {
+  if (e.target === trailerClose || e.target === trailerModal) {
+    trailerModal.classList.add('d-none');
+  }
+});
+
 const getMovie = async id => {
   const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apikey}&language=${language}`;
   const response = await fetch(url);

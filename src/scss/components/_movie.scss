@@ -1,18 +1,49 @@
 .movie {
   background: $primary;
-  padding: 2rem;
+  padding: 2.5rem;
   box-shadow: 0 5px 40px #000;
 
   &__row {
     align-items: center;
   }
   &__image {
+    position: relative;
+
     img {
       width: 100%;
       height: auto;
       object-position: center;
       object-fit: cover;
       box-shadow: 0 0 20px #000;
+    }
+    .trailer__button {
+      position: absolute;
+      left: 50%;
+      bottom: -0.9rem;
+      transform: translateX(-50%) scale(1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: $secondary;
+      color: #fff;
+      border: none;
+      border-radius: 23px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      box-shadow: 0 1px 10px $secondary;
+      transition: all 0.2s;
+
+      svg {
+        fill: #fff;
+        margin-right: 0.5rem;
+      }
+      &:hover {
+        transform: translateX(-50%) scale(1.05);
+      }
     }
   }
   &__title {
