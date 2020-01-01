@@ -1,4 +1,5 @@
-import { getMovie, getCredits } from './ui/movieRequest';
+import getMovie from './ui/getMovieRequest';
+import searchMovie from './ui/searchRequest';
 
 const movieImage = document.querySelector('.movie__image img');
 const movieTitle = document.querySelector('.movie__title');
@@ -13,6 +14,7 @@ const trailerBtn = document.querySelector('.trailer__button');
 const trailerModal = document.querySelector('.modal__trailer');
 const trailerClose = document.querySelector('.close-modal');
 const trailerFrame = document.querySelector('.trailer iframe');
+const srWrapper = document.querySelector('.sr-wrapper');
 
 const setupUI = data => {
   // Display movie title on the page
@@ -26,6 +28,29 @@ const setupUI = data => {
     })
     .join(', ');
   movieGenres.textContent = genresNames;
+
+  // Return movie director and display it on the page
+  let crewArray = data.credits.crew;
+  let director = crewArray.filter(dir => {
+    return dir.department === 'Directing';
+  });
+  let directorName = director[0].name;
+  movieDirector.innerHTML = `
+    <span class="movie__label">Director:</span><span class="movie__label-text">${directorName}</span>
+  `;
+
+  // Return movie writers and display it on the page
+  let writers = crewArray.filter(writer => {
+    return writer.department === 'Writing';
+  });
+  let writersNames = writers
+    .map(writer => {
+      return writer.name;
+    })
+    .join(', ');
+  movieWriters.innerHTML = `
+    <span class="movie__label">Writer:</span><span class="movie__label-text">${writersNames}</span>
+  `;
 
   // Display movie time on the page
   movieTime.innerHTML = `
@@ -92,39 +117,41 @@ const setupUI = data => {
   trailerModal.addEventListener('click', closeTrailerModal);
 };
 
-const setupCredits = data => {
-  // Return movie director and display it on the page
-  let crewArray = data.crew;
-  let director = crewArray.filter(dir => {
-    return dir.department === 'Directing';
-  });
-  let directorName = director[0].name;
-  movieDirector.innerHTML = `
-    <span class="movie__label">Director:</span><span class="movie__label-text">${directorName}</span>
-  `;
-
-  // Return movie writers and display it on the page
-  let writers = crewArray.filter(writer => {
-    return writer.department === 'Writing';
-  });
-  let writersNames = writers
-    .map(writer => {
-      return writer.name;
-    })
-    .join(', ');
-  movieWriters.innerHTML = `
-    <span class="movie__label">Writer:</span><span class="movie__label-text">${writersNames}</span>
-  `;
-};
-
-getMovie('38356')
+/* getMovie('38356')
   .then(data => {
     setupUI(data);
   })
-  .catch(err => console.log(err));
+  .catch(err => console.log(err)); */
 
-getCredits('38356')
-  .then(data => {
-    setupCredits(data);
-  })
-  .catch(err => console.log(err));
+// Search test
+const searchForm = document.querySelector('.search__form');
+const searchInput = document.querySelector('.search__input');
+
+searchForm.addEventListener('submit', e => {
+  e.preventDefault();
+  srWrapper.innerHTML = '';
+  const value = encodeURI(searchInput.value);
+  searchMovie(value)
+    .then(data => {
+      let resultsArray = data.results;
+      let popularity = resultsArray.sort((a, b) => b.popularity - a.popularity);
+      let resultsID = popularity.map(result => {
+        return result.id;
+      });
+      resultsID.forEach(result => {
+        getMovie(result)
+          .then(data => {
+            let title = data.title;
+            let imgSrc = data.poster_path;
+            srWrapper.innerHTML += `
+              <div class="col-2 search__result" data-id="${data.id}">
+                <h4 class="search__result-title">${title}</h4>
+                <div class="search__result-image" style="background: url('https://image.tmdb.org/t/p/w342${imgSrc}');"></div>
+              </div>
+            `;
+          })
+          .catch(err => console.log(err));
+      });
+    })
+    .catch(err => console.log(err));
+});

@@ -16,13 +16,9 @@
     color: #fff;
     font-size: 1rem;
     transition: all 0.2s;
-    width: 240px;
+    width: 300px;
     line-height: 40px;
     float: left;
-
-    &:focus {
-      width: 300px;
-    }
   }
   &__button {
     float: right;
@@ -56,5 +52,30 @@
     padding: 10px;
     background: $search-box-bg;
     box-shadow: 0 0 15px #000;
+  }
+}
+
+.sr-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.search__result {
+  display: flex;
+  flex-direction: column;
+
+  &-title {
+    min-height: 100px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  &-image {
+    width: 100%;
+    min-height: 230px;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
   }
 }
