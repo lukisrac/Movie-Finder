@@ -1,6 +1,7 @@
 import getMovie from './ui/getMovieRequest';
 import searchMovie from './ui/searchRequest';
 
+const movieBox = document.querySelector('.movie');
 const movieImage = document.querySelector('.movie__image img');
 const movieTitle = document.querySelector('.movie__title');
 const movieGenres = document.querySelector('.movie__genre');
@@ -14,7 +15,8 @@ const trailerBtn = document.querySelector('.trailer__button');
 const trailerModal = document.querySelector('.modal__trailer');
 const trailerClose = document.querySelector('.close-modal');
 const trailerFrame = document.querySelector('.trailer iframe');
-const srWrapper = document.querySelector('.sr-wrapper');
+const searchResultsWrapper = document.querySelector('.sr-wrapper');
+let trailerKey;
 
 const setupUI = data => {
   // Display movie title on the page
@@ -92,7 +94,12 @@ const setupUI = data => {
   const openTrailerModal = trailerKey => {
     // Get trailer key
     trailerKey = data.videos.results[0].key;
-    if (!trailerFrame.getAttribute('src')) {
+    console.log(trailerKey);
+    if (
+      !trailerFrame.getAttribute('src') ||
+      trailerFrame.getAttribute('src') !==
+        `https://www.youtube.com/embed/${trailerKey}?enablejsapi=1`
+    ) {
       trailerModal.classList.remove('d-none');
       trailerFrame.setAttribute(
         'src',
@@ -115,24 +122,24 @@ const setupUI = data => {
     }
   };
   trailerModal.addEventListener('click', closeTrailerModal);
+
+  movieBox.classList.remove('d-none');
 };
 
-/* getMovie('38356')
-  .then(data => {
-    setupUI(data);
-  })
-  .catch(err => console.log(err)); */
-
-// Search test
+// Search for movie and display search results on the page
 const searchForm = document.querySelector('.search__form');
 const searchInput = document.querySelector('.search__input');
+const srWrapper = document.querySelector('.sr-wrapper');
 
 searchForm.addEventListener('submit', e => {
   e.preventDefault();
   srWrapper.innerHTML = '';
+  trailerKey = null;
+  movieBox.classList.add('d-none');
   const value = encodeURI(searchInput.value);
   searchMovie(value)
     .then(data => {
+      searchForm.reset();
       let resultsArray = data.results;
       let popularity = resultsArray.sort((a, b) => b.popularity - a.popularity);
       let resultsID = popularity.map(result => {
@@ -142,16 +149,35 @@ searchForm.addEventListener('submit', e => {
         getMovie(result)
           .then(data => {
             let title = data.title;
-            let imgSrc = data.poster_path;
+            let imgSrc = data.poster_path
+              ? `https://image.tmdb.org/t/p/w342${data.poster_path}`
+              : `./images/no-poster.png`;
             srWrapper.innerHTML += `
-              <div class="col-2 search__result" data-id="${data.id}">
-                <h4 class="search__result-title">${title}</h4>
-                <div class="search__result-image" style="background: url('https://image.tmdb.org/t/p/w342${imgSrc}');"></div>
+              <div class="col-2 search__result-wrapper">
+                <div class="search__result" data-id="${data.id}">
+                  <h4 class="search__result-title">${title}</h4>
+                  <div class="search__result-image" style="background: url('${imgSrc}');"></div>
+                  <div class="more">
+                    <h4 class="title">${title}</h4>
+                    <span class="plus-icon">&#43;</span>
+                  </div>
+                </div>
               </div>
             `;
           })
           .catch(err => console.log(err));
       });
+    })
+    .catch(err => console.log(err));
+});
+
+// After click on the search results, load data of clicked movie and display it in the movie box
+searchResultsWrapper.addEventListener('click', e => {
+  let movieID = e.target.parentElement.parentElement.getAttribute('data-id');
+  srWrapper.innerHTML = '';
+  getMovie(movieID)
+    .then(data => {
+      setupUI(data);
     })
     .catch(err => console.log(err));
 });

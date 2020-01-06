@@ -3,6 +3,9 @@
   padding: 2.5rem;
   box-shadow: 0 5px 40px #000;
 
+  &.d-none {
+    display: none;
+  }
   &__row {
     align-items: center;
   }

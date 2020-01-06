@@ -42,6 +42,10 @@ body {
           box-shadow: 0 5px 40px #000;
 }
 
+.movie.d-none {
+  display: none;
+}
+
 .movie__row {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -244,14 +248,17 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  position: relative;
+}
+
+.search__result-wrapper {
+  margin-bottom: 2rem;
 }
 
 .search__result-title {
   min-height: 100px;
   font-weight: 400;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -267,6 +274,56 @@ body {
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: cover !important;
+}
+
+.search__result .more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.search__result .more .plus-icon {
+  font-size: 2rem;
+  background: #ea315a;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -webkit-box-shadow: 0 1px 10px #ea315a;
+          box-shadow: 0 1px 10px #ea315a;
+  cursor: pointer;
+}
+
+.search__result .more .title {
+  font-weight: 400;
+  text-align: center;
+}
+
+.search__result:hover .more {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .modal__trailer {
