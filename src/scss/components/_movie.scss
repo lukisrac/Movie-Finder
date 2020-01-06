@@ -88,4 +88,12 @@
   &__label-text {
     flex-basis: 80%;
   }
+  &__link {
+    text-decoration: none;
+    color: $text-grey;
+
+    &:hover {
+      color: $secondary;
+    }
+  }
 }

@@ -11,12 +11,14 @@ const movieTime = document.querySelector('.time');
 const movieRelease = document.querySelector('.release');
 const movieCountry = document.querySelector('.country');
 const movieLanguage = document.querySelector('.language');
+const movieIMDBLink = document.querySelector('.imdb');
+const movieOverview = document.querySelector('.overview');
 const trailerBtn = document.querySelector('.trailer__button');
 const trailerModal = document.querySelector('.modal__trailer');
 const trailerClose = document.querySelector('.close-modal');
 const trailerFrame = document.querySelector('.trailer iframe');
 const searchResultsWrapper = document.querySelector('.sr-wrapper');
-let trailerKey;
+let trailerKey = null;
 
 const setupUI = data => {
   // Display movie title on the page
@@ -86,6 +88,16 @@ const setupUI = data => {
     <span class="movie__label">Language:</span><span class="movie__label-text">${languageNames}</span>
   `;
 
+  // Get IMDB link and display it on the page
+  movieIMDBLink.innerHTML = `
+    <span class="movie__label">IMDB Link:</span><span class="movie__label-text"><a href="https://www.imdb.com/title/${data.imdb_id}" target="_blank" class="movie__link">${data.imdb_id}</a></span>
+  `;
+
+  // Get movie summary and display it on the page
+  movieOverview.innerHTML = `
+  <span class="movie__label">Overview:</span><span class="movie__label-text">${data.overview}</span>
+  `;
+
   // Get movie poster url and pass it to image source on the page
   let imgUrl = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
   movieImage.setAttribute('src', imgUrl);
@@ -94,7 +106,6 @@ const setupUI = data => {
   const openTrailerModal = trailerKey => {
     // Get trailer key
     trailerKey = data.videos.results[0].key;
-    console.log(trailerKey);
     if (
       !trailerFrame.getAttribute('src') ||
       trailerFrame.getAttribute('src') !==

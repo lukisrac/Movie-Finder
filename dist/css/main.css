@@ -157,6 +157,15 @@ body {
       flex-basis: 80%;
 }
 
+.movie__link {
+  text-decoration: none;
+  color: #b6b7b9;
+}
+
+.movie__link:hover {
+  color: #ea315a;
+}
+
 .search__arrow {
   max-width: 2rem;
   margin: 1rem auto;
@@ -875,5 +884,9 @@ footer {
 
 .section {
   margin-bottom: 4rem;
+}
+
+.section__results {
+  margin-bottom: 0;
 }
 /*# sourceMappingURL=main.css.map */
