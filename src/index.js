@@ -1,5 +1,5 @@
-import getMovie from './ui/getMovieRequest';
-import searchMovie from './ui/searchRequest';
+import getMovie from './modules/getMovieRequest';
+import searchMovie from './modules/searchRequest';
 
 const movieBox = document.querySelector('.movie');
 const movieImage = document.querySelector('.movie__image img');
