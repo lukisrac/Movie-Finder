@@ -138,6 +138,7 @@ const setupUI = data => {
 };
 
 // Search for movie and display search results on the page
+const searchBox = document.querySelector('.search__box');
 const searchForm = document.querySelector('.search__form');
 const searchInput = document.querySelector('.search__input');
 const srWrapper = document.querySelector('.sr-wrapper');
@@ -180,6 +181,49 @@ searchForm.addEventListener('submit', e => {
       });
     })
     .catch(err => console.log(err));
+});
+
+// Fulltext
+document.addEventListener('click', e => {
+  if (e.target === searchInput) {
+    searchBox.classList.add('focus');
+  } else {
+    searchBox.classList.remove('focus');
+  }
+});
+
+const fulltext = document.querySelector('.fulltext__results');
+const fulltextPlaceholder = document.querySelector('.fulltext__placeholder p');
+
+searchForm.addEventListener('input', e => {
+  fulltext.innerHTML = '';
+  fulltextPlaceholder.textContent = 'No search results';
+  const value = encodeURI(searchInput.value);
+  if (value.length) {
+    searchMovie(value)
+      .then(data => {
+        let resultsArray = data.results;
+        let popularity = resultsArray.sort(
+          (a, b) => b.popularity - a.popularity
+        );
+        let resultsID = popularity.map(result => {
+          return result.id;
+        });
+        console.log(data);
+        fulltextPlaceholder.textContent = `Showing ${data.results.length} results of ${data.total_results} total`;
+        resultsID.forEach(result => {
+          getMovie(result)
+            .then(data => {
+              let title = data.title;
+              fulltext.innerHTML += `
+              <div class="col-md-3 fulltext__result">${title}</div>
+            `;
+            })
+            .catch(err => console.log(err));
+        });
+      })
+      .catch(err => console.log(err));
+  }
 });
 
 // After click on the search results, load data of clicked movie and display it in the movie box

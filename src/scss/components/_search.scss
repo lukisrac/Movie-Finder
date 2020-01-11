@@ -16,7 +16,7 @@
     color: #fff;
     font-size: 1rem;
     transition: all 0.2s;
-    width: 300px;
+    width: 550px;
     line-height: 40px;
     float: left;
   }
@@ -48,10 +48,24 @@
   }
   &__box {
     height: 60px;
+    //width: 360px;
+    width: 620px;
     border-radius: 40px;
     padding: 10px;
     background: $search-box-bg;
     box-shadow: 0 0 15px #000;
+    transition: all 0.1s ease;
+
+    &.focus {
+      height: auto;
+      width: 620px;
+      padding: 1.1rem 10px;
+    }
+  }
+  &__form::after {
+    content: '';
+    display: table;
+    clear: both;
   }
 }
 
