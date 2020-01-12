@@ -63,6 +63,23 @@ body {
 
 .fulltext__result {
   padding: 0 1rem;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.fulltext__result-image {
+  max-width: 75px;
+  margin-right: 1rem;
+}
+
+.fulltext__result-title {
+  font-size: 0.8rem;
+  font-weight: 300;
 }
 
 .search__box.focus .fulltext {
@@ -250,6 +267,7 @@ body {
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
   cursor: pointer;
+  outline: none;
 }
 
 .search__button svg {

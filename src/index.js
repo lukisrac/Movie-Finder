@@ -1,204 +1,18 @@
 import getMovie from './modules/getMovieRequest';
 import searchMovie from './modules/searchRequest';
+import Fulltext from './modules/fulltext';
+import SearchComponent from './modules/search';
 
-const movieBox = document.querySelector('.movie');
-const movieImage = document.querySelector('.movie__image img');
-const movieTitle = document.querySelector('.movie__title');
-const movieGenres = document.querySelector('.movie__genre');
-const movieDirector = document.querySelector('.director');
-const movieWriters = document.querySelector('.writer');
-const movieTime = document.querySelector('.time');
-const movieRelease = document.querySelector('.release');
-const movieCountry = document.querySelector('.country');
-const movieLanguage = document.querySelector('.language');
-const movieIMDBLink = document.querySelector('.imdb');
-const movieOverview = document.querySelector('.overview');
-const trailerBtn = document.querySelector('.trailer__button');
-const trailerModal = document.querySelector('.modal__trailer');
-const trailerClose = document.querySelector('.close-modal');
-const trailerFrame = document.querySelector('.trailer iframe');
-const searchResultsWrapper = document.querySelector('.sr-wrapper');
-let trailerKey = null;
+// Global variables
+const fulltext = new Fulltext();
+const searchComponent = new SearchComponent();
 
-const setupUI = data => {
-  // Display movie title on the page
-  movieTitle.textContent = data.title;
-
-  // Return genres and display it on the page
-  let genresArray = data.genres;
-  let genresNames = genresArray
-    .map(gen => {
-      return gen.name;
-    })
-    .join(', ');
-  movieGenres.textContent = genresNames;
-
-  // Return movie director and display it on the page
-  let crewArray = data.credits.crew;
-  let director = crewArray.filter(dir => {
-    return dir.department === 'Directing';
-  });
-  let directorName = director[0].name;
-  movieDirector.innerHTML = `
-    <span class="movie__label">Director:</span><span class="movie__label-text">${directorName}</span>
-  `;
-
-  // Return movie writers and display it on the page
-  let writers = crewArray.filter(writer => {
-    return writer.department === 'Writing';
-  });
-  let writersNames = writers
-    .map(writer => {
-      return writer.name;
-    })
-    .join(', ');
-  movieWriters.innerHTML = `
-    <span class="movie__label">Writer:</span><span class="movie__label-text">${writersNames}</span>
-  `;
-
-  // Display movie time on the page
-  movieTime.innerHTML = `
-    <span class="movie__label">Time:</span><span class="movie__label-text">${data.runtime}m</span>
-  `;
-
-  // Display movie release date on the page
-  movieRelease.innerHTML = `
-    <span class="movie__label">Release:</span><span class="movie__label-text">${data.release_date}</span>
-  `;
-
-  // Return origin countries and display it on the page
-  let countriesArray = data.production_countries;
-  let countriesNames = countriesArray
-    .map(country => {
-      return country.name;
-    })
-    .join(', ');
-  movieCountry.innerHTML = `
-    <span class="movie__label">Country:</span><span class="movie__label-text">${countriesNames}</span>
-  `;
-
-  // Return movie language and display it on the page
-  let languageArray = data.spoken_languages;
-  let languageNames = languageArray
-    .map(language => {
-      return language.name;
-    })
-    .join(', ');
-  movieLanguage.innerHTML = `
-    <span class="movie__label">Language:</span><span class="movie__label-text">${languageNames}</span>
-  `;
-
-  // Get IMDB link and display it on the page
-  movieIMDBLink.innerHTML = `
-    <span class="movie__label">IMDB Link:</span><span class="movie__label-text"><a href="https://www.imdb.com/title/${data.imdb_id}" target="_blank" class="movie__link">${data.imdb_id}</a></span>
-  `;
-
-  // Get movie summary and display it on the page
-  movieOverview.innerHTML = `
-  <span class="movie__label">Overview:</span><span class="movie__label-text">${data.overview}</span>
-  `;
-
-  // Get movie poster url and pass it to image source on the page
-  let imgUrl = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-  movieImage.setAttribute('src', imgUrl);
-
-  // Open trailer modal with video frame
-  const openTrailerModal = trailerKey => {
-    // Get trailer key
-    trailerKey = data.videos.results[0].key;
-    if (
-      !trailerFrame.getAttribute('src') ||
-      trailerFrame.getAttribute('src') !==
-        `https://www.youtube.com/embed/${trailerKey}?enablejsapi=1`
-    ) {
-      trailerModal.classList.remove('d-none');
-      trailerFrame.setAttribute(
-        'src',
-        `https://www.youtube.com/embed/${trailerKey}?enablejsapi=1`
-      );
-    } else {
-      trailerModal.classList.remove('d-none');
-    }
-  };
-  trailerBtn.addEventListener('click', openTrailerModal);
-
-  // Close trailer modal with video frame
-  const closeTrailerModal = e => {
-    if (e.target === trailerClose || e.target === trailerModal) {
-      trailerModal.classList.add('d-none');
-      trailerFrame.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func: 'stopVideo' }),
-        '*'
-      );
-    }
-  };
-  trailerModal.addEventListener('click', closeTrailerModal);
-
-  movieBox.classList.remove('d-none');
-};
-
-// Search for movie and display search results on the page
-const searchBox = document.querySelector('.search__box');
-const searchForm = document.querySelector('.search__form');
 const searchInput = document.querySelector('.search__input');
-const srWrapper = document.querySelector('.sr-wrapper');
 
-searchForm.addEventListener('submit', e => {
-  e.preventDefault();
-  srWrapper.innerHTML = '';
-  trailerKey = null;
-  movieBox.classList.add('d-none');
-  const value = encodeURI(searchInput.value);
-  searchMovie(value)
-    .then(data => {
-      searchForm.reset();
-      let resultsArray = data.results;
-      let popularity = resultsArray.sort((a, b) => b.popularity - a.popularity);
-      let resultsID = popularity.map(result => {
-        return result.id;
-      });
-      resultsID.forEach(result => {
-        getMovie(result)
-          .then(data => {
-            let title = data.title;
-            let imgSrc = data.poster_path
-              ? `https://image.tmdb.org/t/p/w342${data.poster_path}`
-              : `./images/no-poster.png`;
-            srWrapper.innerHTML += `
-              <div class="col-2 search__result-wrapper">
-                <div class="search__result" data-id="${data.id}">
-                  <h4 class="search__result-title">${title}</h4>
-                  <div class="search__result-image" style="background: url('${imgSrc}');"></div>
-                  <div class="more">
-                    <h4 class="title">${title}</h4>
-                    <span class="plus-icon">&#43;</span>
-                  </div>
-                </div>
-              </div>
-            `;
-          })
-          .catch(err => console.log(err));
-      });
-    })
-    .catch(err => console.log(err));
-});
-
-// Fulltext
-document.addEventListener('click', e => {
-  if (e.target === searchInput) {
-    searchBox.classList.add('focus');
-  } else {
-    searchBox.classList.remove('focus');
-  }
-});
-
-const fulltext = document.querySelector('.fulltext__results');
-const fulltextPlaceholder = document.querySelector('.fulltext__placeholder p');
-
-searchForm.addEventListener('input', e => {
-  fulltext.innerHTML = '';
-  fulltextPlaceholder.textContent = 'No search results';
-  const value = encodeURI(searchInput.value);
+// Fulltext searching
+searchInput.addEventListener('input', () => {
+  fulltext.reset();
+  const value = searchComponent.getInputValue();
   if (value.length) {
     searchMovie(value)
       .then(data => {
@@ -209,15 +23,17 @@ searchForm.addEventListener('input', e => {
         let resultsID = popularity.map(result => {
           return result.id;
         });
-        console.log(data);
-        fulltextPlaceholder.textContent = `Showing ${data.results.length} results of ${data.total_results} total`;
+        fulltext.setText(
+          `Showing ${data.results.length} results of ${data.total_results} total`
+        );
         resultsID.forEach(result => {
           getMovie(result)
             .then(data => {
               let title = data.title;
-              fulltext.innerHTML += `
-              <div class="col-md-3 fulltext__result">${title}</div>
-            `;
+              let imgSrc = data.poster_path
+                ? `https://image.tmdb.org/t/p/w92${data.poster_path}`
+                : `./images/no-poster.png`;
+              fulltext.setHTML(title, imgSrc);
             })
             .catch(err => console.log(err));
         });
@@ -226,13 +42,11 @@ searchForm.addEventListener('input', e => {
   }
 });
 
+// Event handler for input focus
+searchComponent.focusToggle();
+
+// Search for movie and display search results on the page after submit
+searchComponent.searchAndDisplayResults();
+
 // After click on the search results, load data of clicked movie and display it in the movie box
-searchResultsWrapper.addEventListener('click', e => {
-  let movieID = e.target.parentElement.parentElement.getAttribute('data-id');
-  srWrapper.innerHTML = '';
-  getMovie(movieID)
-    .then(data => {
-      setupUI(data);
-    })
-    .catch(err => console.log(err));
-});
+searchComponent.setHTMLFromResult();

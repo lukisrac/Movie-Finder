@@ -19,6 +19,18 @@
   }
   &__result {
     padding: 0 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+
+    &-image {
+      max-width: 75px;
+      margin-right: 1rem;
+    }
+    &-title {
+      font-size: 0.8rem;
+      font-weight: 300;
+    }
   }
 }
 
