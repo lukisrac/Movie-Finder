@@ -16,11 +16,11 @@ searchInput.addEventListener('input', () => {
   if (value.length) {
     searchMovie(value)
       .then(data => {
-        let resultsArray = data.results;
-        let popularity = resultsArray.sort(
+        const resultsArray = data.results;
+        const popularity = resultsArray.sort(
           (a, b) => b.popularity - a.popularity
         );
-        let resultsID = popularity.map(result => {
+        const resultsID = popularity.map(result => {
           return result.id;
         });
         fulltext.setText(
@@ -29,11 +29,12 @@ searchInput.addEventListener('input', () => {
         resultsID.forEach(result => {
           getMovie(result)
             .then(data => {
-              let title = data.title;
-              let imgSrc = data.poster_path
+              const id = data.id;
+              const title = data.title;
+              const imgSrc = data.poster_path
                 ? `https://image.tmdb.org/t/p/w92${data.poster_path}`
                 : `./images/no-poster.png`;
-              fulltext.setHTML(title, imgSrc);
+              fulltext.setHTML(id, title, imgSrc);
             })
             .catch(err => console.log(err));
         });
@@ -41,6 +42,9 @@ searchInput.addEventListener('input', () => {
       .catch(err => console.log(err));
   }
 });
+
+// Fulltext load movie from click on search result
+fulltext.loadMovie();
 
 // Event handler for input focus
 searchComponent.focusToggle();
