@@ -1,7 +1,9 @@
+import 'babel-polyfill';
 import getMovie from './modules/getMovieRequest';
 import searchMovie from './modules/searchRequest';
 import Fulltext from './modules/fulltext';
 import SearchComponent from './modules/search';
+import noPosterUrl from '../images/no-poster.png';
 
 // Global variables
 const fulltext = new Fulltext();
@@ -15,31 +17,31 @@ searchInput.addEventListener('input', () => {
   const value = searchComponent.getInputValue();
   if (value.length) {
     searchMovie(value)
-      .then(data => {
+      .then((data) => {
         const resultsArray = data.results;
         const popularity = resultsArray.sort(
           (a, b) => b.popularity - a.popularity
         );
-        const resultsID = popularity.map(result => {
+        const resultsID = popularity.map((result) => {
           return result.id;
         });
         fulltext.setText(
           `Showing ${data.results.length} results of ${data.total_results} total`
         );
-        resultsID.forEach(result => {
+        resultsID.forEach((result) => {
           getMovie(result)
-            .then(data => {
+            .then((data) => {
               const id = data.id;
               const title = data.title;
               const imgSrc = data.poster_path
                 ? `https://image.tmdb.org/t/p/w92${data.poster_path}`
-                : `./images/no-poster.png`;
+                : noPosterUrl;
               fulltext.setHTML(id, title, imgSrc);
             })
-            .catch(err => console.log(err));
+            .catch((err) => console.log(err));
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 });
 

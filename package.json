@@ -4,8 +4,9 @@
   "description": "Javascript app for searching movies",
   "main": "index.js",
   "scripts": {
-    "build": "node_modules/.bin/webpack --mode production",
-    "serve": "webpack-dev-server --mode development"
+    "start": "parcel src/index.html --no-cache --open",
+    "prebuild": "rimraf dist",
+    "build": "parcel build src/index.html --public-url ./"
   },
   "keywords": [
     "movie",
@@ -15,15 +16,31 @@
   "author": "Lukáš Rác",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
-    "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-custom-dist-structure": "^1.1.3",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "sass": "^1.26.3"
   },
-  "dependencies": {
-    "webpack-dev-server": "^3.10.1"
+  "customDistStructure": {
+    "config": {
+      ".js": "js",
+      ".js.map": "js",
+      ".css": "css",
+      ".css.map": "css",
+      "images": [
+        ".jpg",
+        ".png",
+        ".ico",
+        ".svg"
+      ],
+      ".fileExtension": "folder/in/dist",
+      "folder/in/dist": [
+        ".file",
+        ".extensions"
+      ]
+    }
   }
 }

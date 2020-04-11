@@ -2,6 +2,7 @@ import searchMovie from './searchRequest';
 import getMovie from './getMovieRequest';
 import Fulltext from './fulltext';
 import setupUI from './setupUI';
+import noPosterUrl from '../../images/no-poster.png';
 
 const fulltext = new Fulltext();
 const movieBox = document.querySelector('.movie');
@@ -15,7 +16,7 @@ export default class SearchComponent {
     this.searchInput = document.querySelector('.search__input');
   }
   focusToggle() {
-    document.addEventListener('click', e => {
+    document.addEventListener('click', (e) => {
       if (e.target === this.searchInput) {
         this.searchBox.classList.add('focus');
       } else {
@@ -31,42 +32,42 @@ export default class SearchComponent {
     return value;
   }
   setHTMLFromResult() {
-    this.searchWrapper.addEventListener('click', e => {
+    this.searchWrapper.addEventListener('click', (e) => {
       let movieID = e.target.parentElement.parentElement.getAttribute(
         'data-id'
       );
       this.searchWrapper.innerHTML = '';
       getMovie(movieID)
-        .then(data => {
+        .then((data) => {
           setupUI(data);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     });
   }
   searchAndDisplayResults() {
-    this.searchForm.addEventListener('submit', e => {
+    this.searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
       this.clearWrapper();
       trailerKey = null;
       movieBox.classList.add('d-none');
       const value = this.getInputValue();
       searchMovie(value)
-        .then(data => {
+        .then((data) => {
           this.searchForm.reset();
           fulltext.reset();
           let resultsArray = data.results;
           let popularity = resultsArray.sort(
             (a, b) => b.popularity - a.popularity
           );
-          let resultsID = popularity.map(result => {
+          let resultsID = popularity.map((result) => {
             return result.id;
           });
-          resultsID.forEach(result => {
+          resultsID.forEach((result) => {
             getMovie(result)
-              .then(data => {
+              .then((data) => {
                 let imgSrc = data.poster_path
                   ? `https://image.tmdb.org/t/p/w342${data.poster_path}`
-                  : `./images/no-poster.png`;
+                  : noPosterUrl;
                 this.searchWrapper.innerHTML += `
                   <div class="col-2 search__result-wrapper">
                     <div class="search__result" data-id="${data.id}">
@@ -80,10 +81,10 @@ export default class SearchComponent {
                   </div>
                 `;
               })
-              .catch(err => console.log(err));
+              .catch((err) => console.log(err));
           });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     });
   }
 }

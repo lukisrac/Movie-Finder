@@ -17,14 +17,14 @@ const trailerFrame = document.querySelector('.trailer iframe');
 let trailerKey = null;
 
 // Render movie box with passed data
-const setupUI = data => {
+const setupUI = (data) => {
   // Display movie title on the page
   movieTitle.textContent = data.title;
 
   // Return genres and display it on the page
   let genresArray = data.genres;
   let genresNames = genresArray
-    .map(gen => {
+    .map((gen) => {
       return gen.name;
     })
     .join(', ');
@@ -32,7 +32,7 @@ const setupUI = data => {
 
   // Return movie director and display it on the page
   let crewArray = data.credits.crew;
-  let director = crewArray.filter(dir => {
+  let director = crewArray.filter((dir) => {
     return dir.department === 'Directing';
   });
   let directorName = director[0].name;
@@ -41,11 +41,11 @@ const setupUI = data => {
   `;
 
   // Return movie writers and display it on the page
-  let writers = crewArray.filter(writer => {
+  let writers = crewArray.filter((writer) => {
     return writer.department === 'Writing';
   });
   let writersNames = writers
-    .map(writer => {
+    .map((writer) => {
       return writer.name;
     })
     .join(', ');
@@ -66,7 +66,7 @@ const setupUI = data => {
   // Return origin countries and display it on the page
   let countriesArray = data.production_countries;
   let countriesNames = countriesArray
-    .map(country => {
+    .map((country) => {
       return country.name;
     })
     .join(', ');
@@ -77,7 +77,7 @@ const setupUI = data => {
   // Return movie language and display it on the page
   let languageArray = data.spoken_languages;
   let languageNames = languageArray
-    .map(language => {
+    .map((language) => {
       return language.name;
     })
     .join(', ');
@@ -100,9 +100,9 @@ const setupUI = data => {
   movieImage.setAttribute('src', imgUrl);
 
   // Open trailer modal with video frame
-  const openTrailerModal = trailerKey => {
+  const openTrailerModal = () => {
     // Get trailer key
-    trailerKey = data.videos.results[0].key;
+    let trailerKey = data.videos.results[0].key;
     if (
       !trailerFrame.getAttribute('src') ||
       trailerFrame.getAttribute('src') !==
@@ -120,7 +120,7 @@ const setupUI = data => {
   trailerBtn.addEventListener('click', openTrailerModal);
 
   // Close trailer modal with video frame
-  const closeTrailerModal = e => {
+  const closeTrailerModal = (e) => {
     if (e.target === trailerClose || e.target === trailerModal) {
       trailerModal.classList.add('d-none');
       trailerFrame.contentWindow.postMessage(
